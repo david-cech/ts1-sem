@@ -2,6 +2,8 @@ package library;
 
 import accessories.IdGenerator;
 
+import java.util.Objects;
+
 public abstract class User {
     int id;
     String firstName;
@@ -25,5 +27,9 @@ public abstract class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getId() {
+        return id;
     }
 }

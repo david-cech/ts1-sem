@@ -1,0 +1,29 @@
+Nodes/Edges;1;2;3;4;5;6;7;8;11;14;15;16;17;18;19;20
+START;Registered?;-;-;-;-;-;-;-;-;-;-;-;-;-;-;-
+END A;-;-;-;-;-;-;-;-;-;-;-;-;-;-;-;-
+Registered?;-;Register;-;Login;-;-;-;-;-;-;-;-;-;-;-;-
+Register;-;-;Login;-;-;-;-;-;-;-;-;-;-;-;-;-
+Login;-;-;-;-;E;-;-;-;-;-;-;-;-;-;-;-
+E;-;-;-;-;-;List available 
+books;-;Check leases;-;-;-;-;-;-;-;-
+List available 
+books;-;-;-;-;-;-;Lease
+book
+;-;-;-;-;-;-;-;-;-
+Lease
+book
+;-;-;-;-;-;-;-;-;-;-;-;-;E;-;-;View
+notifications?
+
+Check leases;-;-;-;-;-;-;-;-;-;-;-;-;-;Return book;Lease
+book
+;-
+Return book;-;-;-;-;-;-;-;-;Lease
+book
+;-;-;-;-;-;-;-
+View
+notifications?
+;-;-;-;-;-;-;-;-;-;View
+notifications;-;END A;-;-;-;-
+View
+notifications;-;-;-;-;-;-;-;-;-;-;END A;-;-;-;-;-

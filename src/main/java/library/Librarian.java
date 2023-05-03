@@ -1,7 +1,7 @@
 package library;
 
 import accessories.MyDate;
-import messages.LeaseCreated;
+import messages.LeaseCreatedMessage;
 import messages.LeaseExpiredMessage;
 import messages.LeaseWillExpire;
 
@@ -18,45 +18,45 @@ public class Librarian extends User {
     public void messageCustomers() {
         List<Lease> leaseRecord = station.getLeaseRecord();
         for (Lease l : leaseRecord) {
-            if (l.returned) {
+            if (l.isReturned() || l.getTimesNotified() >= 2) {
                 continue;
             }
-            if (System.currentTimeMillis() <= l.end && System.currentTimeMillis() + 3 * MyDate.dayInMilis() >= l.end) {
-                l.getCustomer().sendMessage(new LeaseWillExpire(l.end, this.email));
-            } else if (System.currentTimeMillis() >= l.end) {
-                l.getCustomer().sendMessage(new LeaseExpiredMessage(l.end, 2, this.email));
+            if (l.getTimesNotified() == 0 && System.currentTimeMillis() <= l.getEnd() && System.currentTimeMillis() + 7 * MyDate.dayInMilis() >= l.getEnd()) {
+                l.getCustomer().sendMessage(new LeaseWillExpire(l.getEnd(), this.email));
+            } else if (l.getTimesNotified() == 1 && System.currentTimeMillis() >= l.getEnd()) {
+                l.getCustomer().sendMessage(new LeaseExpiredMessage(l.getEnd(), 2, this.email));
             }
         }
     }
 
-    public boolean leaseBook(Customer c, Book b) {
+    public Lease leaseBook(Customer c, Book b) {
         return leaseBook(c, b, System.currentTimeMillis(), System.currentTimeMillis() + 28 * MyDate.dayInMilis());
     }
 
-    public boolean leaseBook(Customer c, Book b, long start, long end) {
+    public Lease leaseBook(Customer c, Book b, long start, long end) {
         if (station.getBookCount(b) <= 0) { //no books available
-            return false;
+            return null;
         }
 
-        if (start < System.currentTimeMillis() - 3600000L || start > System.currentTimeMillis() - 7 * MyDate.dayInMilis()) { //invalid start of lease
-            return false;
+        if (start < System.currentTimeMillis() - 60000L || start > System.currentTimeMillis() + 7 * MyDate.dayInMilis()) { //invalid start of lease
+            return null;
         }
 
-        if (start >= end) { //lease ends sooner than begins
-            return false;
+        if (end - start < 7 * MyDate.dayInMilis()) { //lease is too short
+            return null;
         }
 
         if (start + 180 * MyDate.dayInMilis() <= end) { //lease longer than 180 days
-            return false;
+            return null;
         }
 
         if (c.getNumberOfActiveLeases() > 9) { //too many active leases
-            return false;
+            return null;
         }
 
         for (Lease l : c.getActiveLeases()) { //customer has expired lease
             if (l.getEnd() < System.currentTimeMillis()) {
-                return false;
+                return null;
             }
         }
 
@@ -64,13 +64,18 @@ public class Librarian extends User {
         this.station.decreaseBookCount(b);
         this.station.recordLease(l);
         c.addLeaseToActiveLeases(l);
-        c.sendMessage(new LeaseCreated(l, this.email));
+        c.sendMessage(new LeaseCreatedMessage(l, this.email));
 
-        return true;
+        return l;
+    }
+
+    public void buyBook(Book b) {
+        station.increaseBookCount(b);
     }
 
     public boolean extendLease(Lease l, long newEnd) {
         if (newEnd > l.getEnd() && newEnd <= l.getStart() + 180 * MyDate.dayInMilis() && l.getLeasedFrom().equals(this.station)) {
+            l.setEnd(newEnd);
             return true;
         }
         return false;

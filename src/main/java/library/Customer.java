@@ -2,21 +2,18 @@ package library;
 
 import messages.Message;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Customer extends User {
     String address;
     List<Message> inbox;
-    Set<Lease> activeLeases;
+    List<Lease> activeLeases;
 
     public Customer(String firstName, String lastName, String email, String password, String dateOfBirth, String address) {
         super(firstName, lastName, email, password, dateOfBirth);
         this.address = address;
         this.inbox = new ArrayList<>();
-        this.activeLeases = new HashSet<>();
+        this.activeLeases = new ArrayList<>();
     }
 
     public void sendMessage(Message message) {
@@ -39,11 +36,28 @@ public class Customer extends User {
         return inbox;
     }
 
-    public Set<Lease> getActiveLeases() {
+    public List<Lease> getActiveLeases() {
         return activeLeases;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setActiveLeases(List<Lease> activeLeases) {
+        this.activeLeases = activeLeases;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Customer customer = (Customer) o;
+        return id == customer.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

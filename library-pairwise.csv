@@ -1,0 +1,23 @@
+# ACTS Test Suite Generation: Sun Apr 30 11:39:01 CEST 2023
+#  '*' represents don't care value 
+# Degree of interaction coverage: 2
+# Number of parameters: 5
+# Maximum number of values per parameter: 4
+# Number of configurations: 16
+LeasedBooks,AvailableBooks,ExpiredLease,RelativeLeaseStart,RelativeLeaseEnd
+9,1,false,0,7
+10,0,true,0,6
+9,0,false,0,180
+10,1,true,0,181
+10,0,false,7,7
+9,1,true,7,6
+10,1,true,7,180
+9,0,false,7,181
+10,1,true,8,7
+9,0,false,8,6
+9,1,true,8,180
+9,1,true,8,181
+10,1,true,-1,7
+9,0,false,-1,6
+9,0,false,-1,180
+9,0,true,-1,181

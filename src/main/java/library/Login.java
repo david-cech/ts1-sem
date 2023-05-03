@@ -4,8 +4,7 @@ import java.util.List;
 
 public class Login {
 
-    public static User login(String email, String password) {
-        DbManager dbManager = DbManager.getInstance();
+    public static User login(DbManager dbManager, String email, String password) {
         List<User> users = dbManager.getUsers();
 
         for (User u : users) {
@@ -17,8 +16,7 @@ public class Login {
         return null;
     }
 
-    public static boolean register(User u) {
-        DbManager dbManager = DbManager.getInstance();
+    public static boolean register(DbManager dbManager, User u) {
         List<User> users = dbManager.getUsers();
 
         for (User user : users) {
@@ -30,13 +28,5 @@ public class Login {
         users.add(u);
 
         return true;
-    }
-
-    public static boolean registerCustomer(String firstName, String lastName, String email, String password, String dateOfBirth, String address) {
-        return Login.register(new Customer(firstName, lastName, email, password, dateOfBirth, address));
-    }
-
-    public static boolean registerLibrarian(String firstName, String lastName, String email, String password, String dateOfBirth, Library station) {
-        return Login.register(new Librarian(firstName, lastName, email, password, dateOfBirth, station));
     }
 }

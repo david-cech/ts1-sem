@@ -65,7 +65,7 @@ public class Library {
         return librarians;
     }
 
-    public boolean leaseBook(Customer c, Book b) {
+    public Lease leaseBook(Customer c, Book b) {
         Random rand = new Random();
         Librarian librarian = librarians.get(rand.nextInt(librarians.size()));
         return librarian.leaseBook(c, b);
@@ -83,9 +83,13 @@ public class Library {
         return librarian.endLease(lease);
     }
 
+    public String getName() {
+        return name;
+    }
+
     @Override
     public String toString() {
-        return "Library " + name + " located at " + address;
+        return name + " located at " + address;
     }
 
     @Override

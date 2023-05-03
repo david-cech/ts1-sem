@@ -15,4 +15,8 @@ public class Author {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Override
+    public String toString() {
+        return firstName + " " + lastName;
+    }
 }
